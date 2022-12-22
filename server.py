@@ -74,8 +74,6 @@ class Server:
     async def send_to_client(self, data, ws):
         count_days = 1
         args = data.split(' ')
-        print(data)
-        print(args)
         if len(args) > 2:
             await ws.send('Wrong arguments! Please send number of days.')
             return 'Ok'
@@ -84,7 +82,6 @@ class Server:
         except:
             await ws.send('Wrong arguments! Please send number of days.')
             return 'Ok'
-        print(count_days)
         res = await self.get_currency(count_days)
         data_client = await self.create_result(res)
         await ws.send(data_client)
