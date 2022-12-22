@@ -73,10 +73,11 @@ class Server:
         if args[0].lower() == 'exchange':
             if len(args) > 2:
                 await ws.send('Wrong arguments! Please send number of days.')
-            try:
-                count_days = int(args[1])
-            except:
-                await ws.send('Wrong arguments! Please send number of days.')
+            if len(args) == 2:
+                try:
+                    count_days = int(args[1])
+                except:
+                    await ws.send('Wrong arguments! Please send number of days.')
             res = await self.get_currency(count_days)
             data_client = await self.create_result(res)
             print(data_client)
