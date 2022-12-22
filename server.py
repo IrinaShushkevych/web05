@@ -33,6 +33,9 @@ class Server:
     async def add_currency(self, currency):
         self.CURRENCY.append(*[el.upper() for el in currency])
 
+    async def remove_currency(self, currency):
+        self.CURRENCY.remove(*[el.upper() for el in currency])
+
     async def create_result(self, data):
         result =[]
         for element in data:
@@ -83,12 +86,15 @@ class Server:
             print(data_client)
             await ws.send(data_client)
         elif args[0].lower() == 'add':
-            print('Add')
             if len(args) == 1:
                 await ws.send('Wrong parameter!')
             await self.add_currency(args[1:])
-            print('Added')
             await ws.send('Currency added.')
+        elif args[0].lower() == 'remove':
+            if len(args) == 1:
+                await ws.send('Wrong parameter!')
+            await self.remove_currency(args[1:])
+            await ws.send('Currency removed.')
 
     async def run_server(self, ws):
         data = await ws.recv()
