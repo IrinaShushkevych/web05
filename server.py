@@ -27,14 +27,13 @@ test = [
 ]
 
 class Server:
-    CURRENCY = ['EUR', 'USD', 'PLZ']
+    CURRENCY = ['EUR', 'USD']
     URL_DATE = 'https://api.privatbank.ua/p24api/exchange_rates?json&date='
 
+    async def add_currency(self, currency):
+        self.CURRENCY.append(*[el.upper() for el in currency])
+
     async def create_result(self, data):
-        # print('DATA: ')
-        # for el in data:
-        #     print('------------------------')
-        #     print(el)
         result =[]
         for element in data:
             row = {element['date']: {}}
@@ -47,9 +46,6 @@ class Server:
                         'purshcasePB': currency['purchaseRate']
                     }
             result.append(row)
-        
-        # print(result)
-
         return json.dumps(result)
 
     async def get_currancy_for_date(self, session, date):
@@ -74,17 +70,24 @@ class Server:
     async def send_to_client(self, data, ws):
         count_days = 1
         args = data.split(' ')
-        if len(args) > 2:
-            await ws.send('Wrong arguments! Please send number of days.')
-            return 'Ok'
-        try:
-            count_days = int(args[1])
-        except:
-            await ws.send('Wrong arguments! Please send number of days.')
-            return 'Ok'
-        res = await self.get_currency(count_days)
-        data_client = await self.create_result(res)
-        await ws.send(data_client)
+        if args[0].lower() == 'exchange':
+            if len(args) > 2:
+                await ws.send('Wrong arguments! Please send number of days.')
+            try:
+                count_days = int(args[1])
+            except:
+                await ws.send('Wrong arguments! Please send number of days.')
+            res = await self.get_currency(count_days)
+            data_client = await self.create_result(res)
+            print(data_client)
+            await ws.send(data_client)
+        elif args[0].lower() == 'add':
+            print('Add')
+            if len(args) == 1:
+                await ws.send('Wrong parameter!')
+            await self.add_currency(args[1:])
+            print('Added')
+            await ws.send('Currency added.')
 
     async def run_server(self, ws):
         data = await ws.recv()

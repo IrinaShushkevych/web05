@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import platform
 import sys
 
-CURRENCY = ['EUR', 'USD', 'PLZ']
+CURRENCY = ['EUR', 'USD']
 URL_DATE = 'https://api.privatbank.ua/p24api/exchange_rates?json&date='
 
 def print_result(res):
