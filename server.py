@@ -36,15 +36,11 @@ class Server:
     async def set_log(self, message):
         path = AsyncPath('log.txt')
         if await path.exists():
-            print('File exists')
             async with async_open('log.txt', 'a') as af:
-                print('Write message =', message)
-                await af.write(message)
+                await af.write(message  + '\n')
         else:
-            print('File not exists')
             async with async_open('log.txt', 'w') as af:
-                print('Write message =', message)
-                await af.write(message)
+                await af.write(message + '\n')
 
     async def create_result(self, data, list_currency):
         CURRENCY = self.CURRENCY + list_currency
