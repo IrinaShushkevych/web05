@@ -89,6 +89,8 @@ class Server:
             if len(args) >= 1:
                 try:
                     count_days = int(args[1])
+                    if count_days > 10:
+                        count_days = 10
                 except:
                     await ws.send('Wrong arguments! Please send number of days.')
             if len(args) > 2:

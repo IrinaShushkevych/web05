@@ -92,14 +92,15 @@ async def main():
     if len(args) >= 1:
         try:
             count_days = int(args[1])
+            if count_days > 10:
+                count_days = 10
         except:
             print('Wrong arguments! Please send number of days.')
     if len(args) > 2:
         for el in args[2:]:
             CURRENCY.append(el.upper())
-    # res = await get_currency(count_days)
-    # print_result(res)
-    print_result(test)
+    res = await get_currency(count_days)
+    print_result(res)
 
 if __name__ == '__main__':
     if platform.system() == 'Windows':
