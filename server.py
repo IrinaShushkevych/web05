@@ -4,6 +4,9 @@ import websockets
 from datetime import datetime, timedelta
 import platform
 import json
+from aiofile import async_open
+from aiopath import AsyncPath
+from datetime import datetime
 
 test = [
     {
@@ -30,18 +33,26 @@ class Server:
     CURRENCY = ['EUR', 'USD']
     URL_DATE = 'https://api.privatbank.ua/p24api/exchange_rates?json&date='
 
-    async def add_currency(self, currency):
-        self.CURRENCY.append(*[el.upper() for el in currency])
+    async def set_log(self, message):
+        path = AsyncPath('log.txt')
+        if await path.exists():
+            print('File exists')
+            async with async_open('log.txt', 'a') as af:
+                print('Write message =', message)
+                await af.write(message)
+        else:
+            print('File not exists')
+            async with async_open('log.txt', 'w') as af:
+                print('Write message =', message)
+                await af.write(message)
 
-    async def remove_currency(self, currency):
-        self.CURRENCY.remove(*[el.upper() for el in currency])
-
-    async def create_result(self, data):
+    async def create_result(self, data, list_currency):
+        CURRENCY = self.CURRENCY + list_currency
         result =[]
         for element in data:
             row = {element['date']: {}}
             for currency in element['exchangeRate']:
-                if currency['currency'] in self.CURRENCY:
+                if currency['currency'] in CURRENCY:
                     row[element['date']][currency['currency']] = {
                         'saleNB': currency['saleRateNB'], 
                         'purshcaseNB': currency['purchaseRateNB'], 
@@ -72,29 +83,21 @@ class Server:
 
     async def send_to_client(self, data, ws):
         count_days = 1
+        list_currency = []
         args = data.split(' ')
         if args[0].lower() == 'exchange':
-            if len(args) > 2:
-                await ws.send('Wrong arguments! Please send number of days.')
-            if len(args) == 2:
+            if len(args) >= 1:
                 try:
                     count_days = int(args[1])
                 except:
                     await ws.send('Wrong arguments! Please send number of days.')
+            if len(args) > 2:
+                for el in args[2:]:
+                    list_currency.append(el.upper())
             res = await self.get_currency(count_days)
-            data_client = await self.create_result(res)
-            print(data_client)
+            data_client = await self.create_result(res, list_currency)
+            await self.set_log(f'{datetime.now()} Exchange {args[1:]}')
             await ws.send(data_client)
-        elif args[0].lower() == 'add':
-            if len(args) == 1:
-                await ws.send('Wrong parameter!')
-            await self.add_currency(args[1:])
-            await ws.send('Currency added.')
-        elif args[0].lower() == 'remove':
-            if len(args) == 1:
-                await ws.send('Wrong parameter!')
-            await self.remove_currency(args[1:])
-            await ws.send('Currency removed.')
 
     async def run_server(self, ws):
         data = await ws.recv()
