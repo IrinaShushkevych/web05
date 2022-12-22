@@ -1,0 +1,81 @@
+
+https://api.privatbank.ua/p24api/exchange_rates?date=01.12.2014
+https://api.privatbank.ua/p24api/exchange_rates?json&date=01.12.2014
+
+{'date': '01.12.2021', 'bank': 'PB', 'baseCurrency': 980, 'baseCurrencyLit': 'UAH', 'exchangeRate': [{'baseCurrency': 'UAH', 'currency': 'AUD', 'saleRateNB': 19.4527, 'purchaseRateNB': 19.4527}, {'baseCurrency': 'UAH', 'currency': 'AZN', 'saleRateNB': 16.0319, 'purchaseRateNB': 16.0319}, {'baseCurrency': 'UAH', 'currency': 'BYN', 'saleRateNB': 10.6995, 'purchaseRateNB': 10.6995}, {'baseCurrency': 'UAH', 'currency': 'CAD', 'saleRateNB': 21.2877, 'purchaseRateNB': 21.2877}, {'baseCurrency': 'UAH', 'currency': 'CHF', 'saleRateNB': 29.6596, 'purchaseRateNB': 29.6596, 'saleRate':
+30.2, 'purchaseRate': 28.6}, {'baseCurrency': 'UAH', 'currency': 'CNY', 'saleRateNB': 4.2715, 'purchaseRateNB': 4.2715},
+
+
+            {
+                "date":"01.12.2014","bank":"PB","baseCurrency":980,"baseCurrencyLit":"UAH","exchangeRate":
+                [
+                    {"baseCurrency":"UAH","currency":"CHF","saleRateNB":15.6389750,"purchaseRateNB":15.6389750,"saleRate":17.0000000,"purchaseRate":15.5000000},
+                    {"baseCurrency":"UAH","currency":"EUR","saleRateNB":18.7949200,"purchaseRateNB":18.7949200,"saleRate":20.0000000,"purchaseRate":19.2000000},
+                    {"baseCurrency":"UAH","currency":"GBP","saleRateNB":23.6324910,"purchaseRateNB":23.6324910,"saleRate":25.8000000,"purchaseRate":24.0000000},
+                    {"baseCurrency":"UAH","currency":"PLZ","saleRateNB":4.4922010,"purchaseRateNB":4.4922010,"saleRate":5.0000000,"purchaseRate":4.2000000},
+                    {"baseCurrency":"UAH","currency":"SEK","saleRateNB":2.0283750,"purchaseRateNB":2.0283750},
+                    {"baseCurrency":"UAH","currency":"UAH","saleRateNB":1.0000000,"purchaseRateNB":1.0000000},
+                    {"baseCurrency":"UAH","currency":"USD","saleRateNB":15.0564130,"purchaseRateNB":15.0564130,"saleRate":15.7000000,"purchaseRate":15.3500000},
+                    {"baseCurrency":"UAH","currency":"XAU","saleRateNB":17747.7470000,"purchaseRateNB":17747.7470000},
+                    {"baseCurrency":"UAH","currency":"CAD","saleRateNB":13.2107400,"purchaseRateNB":13.2107400,"saleRate":15.0000000,"purchaseRate":13.0000000}
+                ]
+            }
+
+Параметри відповіді:
+Назва	Опис
+baseCurrency	Базова валюта
+currency	Валюта угоди
+saleRateNB/purchaseRateNB	Курс продажу НБУ
+saleRate	Курс продажу ПриватБанку
+purchaseRate	Курс купівлі ПриватБанку
+
+
+Список доступних валют:
+Код валюти	Назва
+USD	долар США
+EUR	євро
+CHF	швейцарський франк
+GBP	британський фунт
+PLZ	польський злотий
+SEK	шведська крона
+XAU	золото
+CAD	канадський долар
+
+Готівковий курс ПриватБанку (у відділеннях):
+
+GET JSON:
+https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5
+https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5
+
+[{'ccy': 'EUR', 'base_ccy': 'UAH', 'buy': '40.95000', 'sale': '41.95000'}, {'ccy': 'USD', 'base_ccy': 'UAH', 'buy': '39.40000', 'sale': '39.90000'}]
+
+
+14.11.2022р. XML відповідь буде змінена на JSON формат
+Безготівковий курс ПриватБанку (конвертація за картками, Приват24, поповнення вкладів):
+
+GET JSON:
+https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=11
+https://api.privatbank.ua/p24api/pubinfo?exchange&json&coursid=11
+14.11.2022р. XML відповідь буде змінена на JSON формат
+
+ [
+            {
+            "ccy":"EUR",
+            "base_ccy":"UAH",
+            "buy":"19.20000",
+            "sale":"20.00000"
+            },
+            {
+            "ccy":"USD",
+            "base_ccy":"UAH",
+            "buy":"15.50000",
+            "sale":"15.85000"
+            }
+            ]
+
+Параметри відповіді:
+Назва	Опис
+ccy	Код валюти (довідник кодів валют: https://ru.wikipedia.org/wiki/Коды_валют)
+base_ccy	Код національної валюти
+buy	Курс купівлі
+sale	Курс продажу
